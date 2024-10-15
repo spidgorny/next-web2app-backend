@@ -13,6 +13,7 @@
     "bunyan": "^1.8.15",
     "framer-motion": "^11.11.8",
     "ioredis": "^5.4.1",
+    "nano-spawn": "^0.1.0",
     "next": "14.2.15",
     "nextui-cli": "^0.3.4",
     "react": "^18",

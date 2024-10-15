@@ -1,18 +1,4 @@
-import bunyan from "bunyan";
-import splunkBunyan from "splunk-bunyan-logger";
-
-const config = {
-  token: process.env.SPLUNK_TOKEN,
-  url: "https://localhost:8088",
-};
-
-const splunkStream = splunkBunyan.createStream(config);
-
-// Note: splunkStream must be set to an element in the streams array
-const Logger = bunyan.createLogger({
-  name: "my logger",
-  streams: [splunkStream],
-});
+import { Logger } from "@/lib/splunk";
 
 const payload = {
   // Message can be anything; doesn't have to be an object
