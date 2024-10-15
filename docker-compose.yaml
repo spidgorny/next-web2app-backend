@@ -3,3 +3,11 @@ services:
     image: redis
     ports:
       - "6380:6379"
+  splunk:
+    image: splunk/splunk
+    ports:
+      - "8001:8000"
+      - "8088:8088"
+    environment:
+      - "SPLUNK_START_ARGS=--accept-license"
+      - "SPLUNK_PASSWORD=adminadmin"
