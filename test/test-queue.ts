@@ -2,9 +2,10 @@ import Queue, { Job } from "bee-queue";
 import { Logger } from "@/lib/splunk";
 
 (async () => {
-  const addQueue = new Queue("addition");
+  const queue = new Queue("addition");
+  await queue.ready();
 
-  const job = addQueue.createJob({ x: 2, y: 3 });
+  const job = queue.createJob({ x: 2, y: 3 });
   await job.timeout(3000).retries(2).save();
   // job enqueued, job.id populated
   Logger.info("job added", {
@@ -15,7 +16,7 @@ import { Logger } from "@/lib/splunk";
     status: job.status,
   });
 
-  addQueue.process(async (job: Job<{ x: number; y: number }>) => {
+  queue.process(async (job: Job<{ x: number; y: number }>) => {
     Logger.info(`Processing job ${job.id}`);
     return job.data.x + job.data.y;
   });

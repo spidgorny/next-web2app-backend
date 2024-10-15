@@ -8,8 +8,12 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   try {
-    const addQueue = new Queue("build-android");
-    const job = addQueue.createJob({ title: "test from job" });
+    const queue = new Queue("build-android");
+    queue.on("ready", async () => {
+      Logger.info("ready");
+    });
+    await queue.ready();
+    const job = queue.createJob({ title: "test from job" });
     await job.timeout(100_000).retries(2).save();
     console.log("Created job", job.id);
     return NextResponse.json({

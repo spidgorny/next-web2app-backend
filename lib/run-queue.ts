@@ -3,9 +3,10 @@ import { Logger } from "@/lib/splunk";
 import spawn from "nano-spawn";
 
 (async () => {
-  const addQueue = new Queue("build-android");
+  const queue = new Queue("build-android");
+  await queue.ready();
 
-  addQueue.process(1, async (job: Job<{ title: string }>) => {
+  queue.process(1, async (job: Job<{ title: string }>) => {
     Logger.info(`Processing job ${job.id}`);
     const cwd = "/home/slawa/dev/flutter_site_container";
     const cmd = "flutter build appbundle";
