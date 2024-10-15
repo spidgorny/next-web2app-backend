@@ -14,8 +14,9 @@ export async function POST(
     });
     await queue.ready();
     const job = queue.createJob({ title: "test from job" });
+    Logger.info("saving");
     await job.timeout(100_000).retries(2).save();
-    console.log("Created job", job.id);
+    Logger.info("Created job", job.id);
     return NextResponse.json({
       id: job.id,
       progress: job.progress,
