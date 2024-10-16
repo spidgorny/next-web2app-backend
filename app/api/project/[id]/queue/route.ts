@@ -1,32 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import Queue from "bee-queue";
 import { Logger } from "@/lib/splunk";
 import invariant from "tiny-invariant";
+import { queue } from "@/lib/queue";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
-    const queue = new Queue("build-android");
-    queue.on("ready", async () => {
-      Logger.info("ready");
-    });
-    await queue.ready();
-    const job = queue.createJob({ title: "test from job" });
+    Logger.info("create queue");
     Logger.info("saving");
-    await job.timeout(100_000).retries(2).save();
+    const job = await queue.add({ title: "test from job" });
     Logger.info("Created job", job.id);
-    return NextResponse.json({
-      id: job.id,
-      progress: job.progress,
-      data: job.data,
-      options: job.options,
-      status: job.status,
-    });
+    return NextResponse.json(job.toJSON());
   } catch (e) {
     Logger.error(e);
     invariant(e instanceof Error);
+    Logger.error(e.stack);
     return NextResponse.json({
       status: "error",
       message: e.message,
