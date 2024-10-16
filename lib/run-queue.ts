@@ -7,10 +7,12 @@ import { queue } from "@/lib/queue";
   void queue.process(1, async (job: Job<{ title: string }>) => {
     Logger.info(`Processing job ${job.id}`);
     const cwd = "/home/slawa/dev/flutter_site_container";
-    const cmd = "flutter build appbundle";
+    const cmd = "script -c 'flutter build appbundle'";
+
     Logger.info(cwd, cmd);
-    for await (const line of spawn(cmd.split(" ")[0], cmd.split(" ").slice(1), {
+    for await (const line of spawn(cmd, {
       cwd,
+      shell: true,
     })) {
       console.log(line);
       Logger.info(line);
