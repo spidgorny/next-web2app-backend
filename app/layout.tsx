@@ -25,11 +25,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html
+      lang="en"
+      className="h-full"
+      style={{ background: "#161618", color: "rgba(255, 255, 245, .86)" }}
+    >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-3 h-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full p-0 m-0 dark`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <section className="flex flex-row gap-3 mx-auto p-0 h-full">
+            <aside className="w-1/6 ms-48">Menu</aside>
+            <div
+              className="w-5/6 flex flex-col h-full"
+              style={{ background: "#1e1e20" }}
+            >
+              <header className="border-b border-black p-5 pe-48">
+                <h1>Web2App</h1>
+              </header>
+              <main className="flex-grow p-5 pe-48">{children}</main>
+            </div>
+          </section>
+        </Providers>
       </body>
     </html>
   );

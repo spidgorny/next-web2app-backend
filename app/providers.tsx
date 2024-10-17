@@ -11,9 +11,7 @@ export function Providers({ children }: PropsWithChildren) {
   };
   return (
     <SWRConfig value={{ fetcher }}>
-      <NextUIProvider>
-        <main className="dark text-foreground bg-background">{children}</main>
-      </NextUIProvider>
+      <NextUIProvider>{children}</NextUIProvider>
     </SWRConfig>
   );
 }
