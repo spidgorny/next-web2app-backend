@@ -14,9 +14,10 @@ import { queue } from "@/lib/queue";
       cwd,
       shell: true,
     })) {
-      console.log(line);
       Logger.info(line);
+      await job.log(line);
     }
+    await job.progress(1);
     Logger.info("processing job", job.id, "done");
   });
 

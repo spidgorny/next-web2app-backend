@@ -1,28 +1,23 @@
 "use client";
 
-import {
-  getKeyValue,
-  Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 import { useSwrApi } from "@/app/use-swr-api";
+import { RenderTable, TableColumnDef } from "@/app/render-table";
 import Link from "next/link";
 
 const columns = [
   {
     key: "name",
     label: "NAME",
+    render: (row: Record<string, any>) => (
+      <Link href={`/project/${row.id}`}>{row.name}</Link>
+    ),
   },
   {
     key: "status",
     label: "STATUS",
   },
-];
+] as TableColumnDef[];
 
 export default function Home() {
   const { list } = useSwrApi("/api/project");
@@ -31,27 +26,7 @@ export default function Home() {
       <h1 className="text-2xl mb-3">
         Projects ({list.isLoading ? <Spinner /> : list.data?.length})
       </h1>
-
-      <Table aria-label="Example static collection table">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={list.data ?? []} emptyContent={"No rows to display."}>
-          {(item) => (
-            <TableRow key={item.key}>
-              {(columnKey) => (
-                <TableCell>
-                  <Link href={`/project/${item.id}`}>
-                    {getKeyValue(item, columnKey)}
-                  </Link>
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <RenderTable columns={columns} data={list.data} />
     </div>
   );
 }
