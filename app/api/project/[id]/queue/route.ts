@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { Logger } from "@/lib/splunk";
 import invariant from "tiny-invariant";
 import { queue } from "@/lib/queue";
+import { Project } from "@/app/project";
+import { Job } from "bull";
+import { sort } from "radash";
 
 export async function GET() {
   let jobs = await queue.getJobs(["completed", "active", "failed"]);
@@ -13,6 +16,7 @@ export async function GET() {
       };
     }),
   );
+  jobs = sort(jobs, (a: Job<Project>) => a.id).reverse();
   return NextResponse.json({
     data: jobs,
   });

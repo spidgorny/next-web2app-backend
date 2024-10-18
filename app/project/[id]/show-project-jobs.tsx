@@ -4,9 +4,17 @@ import { id } from "postcss-selector-parser";
 import { RenderTable } from "@/app/render-table";
 import Link from "next/link";
 import { Project } from "@/app/project";
+import { Spinner } from "@nextui-org/react";
+import humanizeDuration from "humanize-duration";
 
 export function useJobList(project: string) {
-  const { list } = useSwrApi(urlcat(`/api/project/${id}/queue`, { project }));
+  const { list } = useSwrApi(
+    urlcat(`/api/project/${id}/queue`, { project }),
+    undefined,
+    {
+      refreshInterval: 3000,
+    },
+  );
   return list;
 }
 
@@ -35,6 +43,19 @@ export function ShowProjectJobs(props: { project: Project }) {
         {
           key: "status",
           label: "Status",
+          render: (row: Record<string, any>) => {
+            if (row.status === "active") {
+              return <Spinner />;
+            }
+            return row.status;
+          },
+        },
+        {
+          key: "dur",
+          label: "Dur",
+          render: (row: Record<string, any>) => {
+            return humanizeDuration(row.finishedOn - row.processedOn);
+          },
         },
       ]}
       data={list.data}
