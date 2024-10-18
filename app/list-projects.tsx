@@ -3,7 +3,8 @@ import Link from "next/link";
 import { RenderTable, TableColumnDef } from "@/app/render-table";
 import { useSwrApi } from "@/app/use-swr-api";
 import { Button, Spinner } from "@nextui-org/react";
-import { Project } from "@/app/page";
+
+import { Project } from "@/app/project";
 
 const columns = [
   {

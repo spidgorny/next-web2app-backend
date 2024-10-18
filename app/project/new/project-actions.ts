@@ -2,7 +2,8 @@
 
 import { nanoid } from "nanoid";
 import { store } from "@/lib/json-store";
-import { Project } from "@/app/page";
+
+import { Project } from "@/app/project";
 
 export async function createProject(data: Project) {
   let id = nanoid();

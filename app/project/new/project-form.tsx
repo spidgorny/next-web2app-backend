@@ -1,5 +1,4 @@
 "use client";
-import { Project } from "@/app/page";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 import {
@@ -7,6 +6,7 @@ import {
   updateProject,
 } from "@/app/project/new/project-actions";
 import { Button, Input } from "@nextui-org/react";
+import { Project } from "@/app/project";
 
 export function ProjectForm(props: { initialData?: Project }) {
   const router = useRouter();
