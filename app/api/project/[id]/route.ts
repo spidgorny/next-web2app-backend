@@ -9,7 +9,8 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  const storedData = await store.get(`project:${params.id}`);
-  console.log(storedData);
+  let storedData = await store.get(`project:${params.id}`);
+  storedData = { id: params.id, ...storedData };
+  // console.log(storedData);
   return NextResponse.json(storedData);
 }

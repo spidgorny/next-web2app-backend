@@ -15,19 +15,26 @@ export type TableColumnDef = {
   render?: (row: Record<string, any>) => ReactNode;
 };
 
-export function RenderTable(props: { columns: TableColumnDef[]; data: any[] }) {
+export function RenderTable<TRow>(props: {
+  columns: TableColumnDef[];
+  data: TRow[];
+}) {
+  // console.table(props.columns);
+  let index = 0;
   return (
     <Table aria-label="Example static collection table">
       <TableHeader columns={props.columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+        {(column: TableColumnDef) => (
+          <TableColumn key={column.key}>{column.label}</TableColumn>
+        )}
       </TableHeader>
       <TableBody items={props.data ?? []} emptyContent={"No rows to display."}>
-        {(item) => (
-          <TableRow key={item.key}>
-            {(columnKey) => {
+        {(item: TRow) => (
+          <TableRow key={item.id ?? index++}>
+            {(columnKey: string) => {
               let columnDef = props.columns.find((x) => x.key === columnKey);
               return (
-                <TableCell>
+                <TableCell key={columnKey}>
                   {typeof columnDef?.render === "function"
                     ? columnDef?.render(item)
                     : getKeyValue(item, columnKey)}
