@@ -41,7 +41,7 @@ export default function RootLayout({
               style={{ background: "#1e1e20" }}
             >
               <header className="border-b border-black p-5 pe-48">
-                <h1>Web2App</h1>
+                <h1 className="text-2xl">Web2App</h1>
               </header>
               <main className="flex-grow p-5 pe-48">{children}</main>
             </div>
