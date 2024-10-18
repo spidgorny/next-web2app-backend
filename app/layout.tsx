@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/app/providers";
+import Link from "next/link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,21 +28,23 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="h-full"
+      className="min-h-full"
       style={{ background: "#161618", color: "rgba(255, 255, 245, .86)" }}
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full p-0 m-0 dark`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full p-0 m-0 dark`}
       >
         <Providers>
-          <section className="flex flex-row gap-3 mx-auto p-0 h-full">
+          <section className="flex flex-row gap-3 mx-auto p-0 min-h-full">
             <aside className="w-1/6 ms-48">Menu</aside>
             <div
-              className="w-5/6 flex flex-col h-full"
+              className="w-5/6 flex flex-col min-h-full"
               style={{ background: "#1e1e20" }}
             >
               <header className="border-b border-black p-5 pe-48">
-                <h1 className="text-2xl">Web2App</h1>
+                <h1 className="text-2xl">
+                  <Link href="/">Web2App</Link>
+                </h1>
               </header>
               <main className="flex-grow p-5 pe-48">{children}</main>
             </div>

@@ -28,8 +28,9 @@ export async function POST(
 ) {
   try {
     Logger.info("create queue");
+    const formData = await request.json();
     Logger.info("saving");
-    const job = await queue.add({ title: "test from job" });
+    const job = await queue.add(formData);
     Logger.info("Created job", job.id);
     return NextResponse.json(job.toJSON());
   } catch (e) {

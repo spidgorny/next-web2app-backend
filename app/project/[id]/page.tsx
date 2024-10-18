@@ -40,9 +40,7 @@ export function BuildButton(props: { project: Project }) {
   const list = useJobList(props.project.id);
 
   const { isWorking, error, run } = useAsyncWorking(async () => {
-    await axios.post(`/api/project/${props.project.id}/queue`, {
-      data: props.project,
-    });
+    await axios.post(`/api/project/${props.project.id}/queue`, props.project);
     await list.mutate();
   });
   return (
