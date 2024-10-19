@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Project } from "@/app/project";
 import { Spinner } from "@nextui-org/react";
 import humanizeDuration from "humanize-duration";
+import { Job } from "bull";
+import humanize from "humanize";
 
 export function useJobList(project: string) {
   const { list } = useSwrApi(
@@ -17,6 +19,8 @@ export function useJobList(project: string) {
   );
   return list;
 }
+
+type ProjectJob = Job<Project> & { status: "active" | "completed" | "failed" };
 
 export function ShowProjectJobs(props: { project: Project }) {
   const list = useJobList(props.project.id);
@@ -30,7 +34,7 @@ export function ShowProjectJobs(props: { project: Project }) {
         {
           key: "name",
           label: "Name",
-          render: (row: Record<string, any>) => (
+          render: (row: ProjectJob) => (
             <Link href={`/project/${props.project.id}/job/${row.id}`}>
               {row.name}
             </Link>
@@ -39,11 +43,13 @@ export function ShowProjectJobs(props: { project: Project }) {
         {
           key: "timestamp",
           label: "Timestamp",
+          render: (row: ProjectJob) =>
+            humanize.date("Y-m-d H:i:s", row.timestamp / 1000),
         },
         {
           key: "status",
           label: "Status",
-          render: (row: Record<string, any>) => {
+          render: (row: ProjectJob) => {
             if (row.status === "active") {
               return <Spinner />;
             }
@@ -53,8 +59,10 @@ export function ShowProjectJobs(props: { project: Project }) {
         {
           key: "dur",
           label: "Dur",
-          render: (row: Record<string, any>) => {
-            return humanizeDuration(row.finishedOn - row.processedOn);
+          render: (row: ProjectJob) => {
+            return humanizeDuration(
+              (row?.finishedOn ?? 0) - (row?.processedOn ?? 0),
+            );
           },
         },
       ]}

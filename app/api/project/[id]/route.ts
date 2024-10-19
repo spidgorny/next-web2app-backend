@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Redis from "ioredis";
-import JSONStore from "redis-json";
-
-const redis = new Redis();
-const store = new JSONStore(redis);
+import { store } from "@/lib/json-store";
 
 export async function GET(
   request: NextRequest,
