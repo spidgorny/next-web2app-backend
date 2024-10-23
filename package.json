@@ -25,7 +25,7 @@
     "ioredis": "^5.4.1",
     "mv": "^2.1.1",
     "nano-spawn": "^0.1.0",
-    "next": "14.2.15",
+    "next": "15.0.1",
     "nextjs-toploader": "^3.7.15",
     "nextui-cli": "^0.3.4",
     "radash": "^12.1.0",
@@ -41,7 +41,7 @@
     "yaml": "^2.6.0"
   },
   "devDependencies": {
-    "@types/bull": "^3.15.9",
+    "@types/bull": "^4.10.0",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/humanize-duration": "^3.27.4",
@@ -50,8 +50,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/splunk-bunyan-logger": "^0.9.3",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.15",
+    "eslint": "^9",
+    "eslint-config-next": "15.0.1",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.14",
