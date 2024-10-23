@@ -1,4 +1,5 @@
-"use client";
+"use client";;
+import { use } from "react";
 
 import { useSwrApi } from "@/app/use-swr-api";
 import Link from "next/link";
@@ -12,7 +13,8 @@ import axios from "axios";
 
 import type { Project } from "@/app/project";
 
-export default function Project({ params }: { params: { id: string } }) {
+export default function Project(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const { item } = useSwrApi<Project>(`/api/project`, params.id);
   return (
     <div>

@@ -3,8 +3,9 @@ import { queue } from "@/lib/queue";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string; jobId: string } },
+  props: { params: Promise<{ id: string; jobId: string }> }
 ) {
+  const params = await props.params;
   let job = await queue.getJob(params.jobId);
   let status = await job?.getState();
   let logs = await queue.getJobLogs(params.jobId);

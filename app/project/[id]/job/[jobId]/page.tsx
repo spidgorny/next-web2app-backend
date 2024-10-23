@@ -1,4 +1,5 @@
-"use client";
+"use client";;
+import { use } from "react";
 
 import { useSwrApi } from "@/app/use-swr-api";
 import { Job } from "bull";
@@ -14,11 +15,12 @@ export interface JobWithLogs extends Job<Project> {
   };
 }
 
-export default function Project({
-  params,
-}: {
-  params: { id: string; jobId: string };
-}) {
+export default function Project(
+  props: {
+    params: Promise<{ id: string; jobId: string }>;
+  }
+) {
+  const params = use(props.params);
   const { item } = useSwrApi<JobWithLogs>(
     `/api/project/${params.id}/queue/job/`,
     params.jobId,
