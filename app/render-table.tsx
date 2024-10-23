@@ -9,14 +9,14 @@ import {
   TableRow,
 } from "@nextui-org/react";
 
-export type TableColumnDef = {
+export type TableColumnDef<T extends Record<string, any>> = {
   key: string;
   label: string;
-  render?: (row: Record<string, any>) => ReactNode;
+  render?: (row: T) => ReactNode;
 };
 
-export function RenderTable<TRow>(props: {
-  columns: TableColumnDef[];
+export function RenderTable<TRow extends Record<string, any>>(props: {
+  columns: TableColumnDef<TRow>[];
   data: TRow[];
 }) {
   // console.table(props.columns);
@@ -24,14 +24,14 @@ export function RenderTable<TRow>(props: {
   return (
     <Table aria-label="Example static collection table">
       <TableHeader columns={props.columns}>
-        {(column: TableColumnDef) => (
+        {(column: TableColumnDef<TRow>) => (
           <TableColumn key={column.key}>{column.label}</TableColumn>
         )}
       </TableHeader>
       <TableBody items={props.data ?? []} emptyContent={"No rows to display."}>
         {(item: TRow) => (
           <TableRow key={item.id ?? index++}>
-            {(columnKey: string) => {
+            {(columnKey: string | number) => {
               let columnDef = props.columns.find((x) => x.key === columnKey);
               return (
                 <TableCell key={columnKey}>

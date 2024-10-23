@@ -16,7 +16,7 @@ export async function GET() {
       };
     }),
   );
-  jobs = sort(jobs, (a: Job<Project>) => a.id).reverse();
+  jobs = sort(jobs, (a: Job<Project>) => Number(a.id)).reverse();
   return NextResponse.json({
     data: jobs,
   });
