@@ -29,17 +29,36 @@ export default function RootLayout({
     <html
       lang="en"
       className="min-h-screen"
-      style={{ background: "#161618", color: "rgba(255, 255, 245, .86)" }}
+      style={{ background: "#161618", color: "#fffff5" }}
     >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen p-0 m-0 dark`}
       >
         <Providers>
           <section className="flex flex-row gap-3 mx-auto p-0 min-h-screen">
-            <aside className="w-1/6 ms-48">Menu</aside>
+            <aside className="w-1/6 ms-48 p-6">
+              <h5 className="text-xl mt-3 mb-5">Menu</h5>
+              <ul className="flex flex-col my-5 divide-y-1 divide-gray-800 border-0 [&>*]:py-3">
+                <li>
+                  <Link href="/" className="block">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/project" className="block">
+                    Projects
+                  </Link>
+                </li>
+                <li>
+                  <Link href="https://google.com/" className="block">
+                    Website
+                  </Link>
+                </li>
+              </ul>
+            </aside>
             <div
               className="w-5/6 flex flex-col min-h-screen"
-              style={{ background: "#1e1e20" }}
+              style={{ background: "#1E1E20" }}
             >
               <header className="border-b border-black p-5 pe-48">
                 <h1 className="text-2xl">
