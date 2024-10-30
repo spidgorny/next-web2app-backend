@@ -10,7 +10,7 @@ const columns = [
   {
     key: "name",
     label: "NAME",
-    render: (row: Record<string, any>) => (
+    render: (row) => (
       <Link href={`/project/${row.id}`}>{row.name}</Link>
     ),
   },
@@ -18,7 +18,7 @@ const columns = [
     key: "status",
     label: "STATUS",
   },
-] as TableColumnDef[];
+] as TableColumnDef<Record<string, any>>[];
 
 export function ListProjects() {
   const { list } = useSwrApi("/api/project");
