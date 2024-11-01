@@ -9,6 +9,7 @@ import path from "node:path";
 import invariant from "tiny-invariant";
 import mv from "mv";
 import { promisify } from "node:util";
+import { getTargetArtifactPath } from "./getTargetArtifactPath";
 
 const mvAsync = promisify(mv);
 
@@ -65,7 +66,7 @@ async function storeBuildResult(job: Job<Project>) {
     flutterProjectRoot,
     "build/app/outputs/bundle/release/app-release.aab",
   );
-  const destination = `/tmp/web2app/project-${job.data.id}/job-${job.id}/app-release.aab`;
+  const destination = getTargetArtifactPath(job);
   fs.mkdirSync(path.dirname(destination), { recursive: true });
   // @ts-ignore
   await mvAsync(androidFile, destination, { mkdirp: true });

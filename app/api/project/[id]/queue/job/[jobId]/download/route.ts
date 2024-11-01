@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { queue } from "@/lib/queue";
+import { getTargetArtifactPath } from "@/lib/getTargetArtifactPath";
+import invariant from "tiny-invariant";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string; jobId: string }> },
 ) {
   try {
-    const { id } = params;
+    const { jobId } = await params;
+    console.log("download", { jobId });
+    const job = await queue.getJob(jobId);
+    invariant(job, "job not found");
 
     // You'll need to adjust this path based on where your artifacts are stored
-    const artifactPath = path.join(process.cwd(), "artifacts", `${id}`);
+    const artifactPath = getTargetArtifactPath(job);
 
     if (!fs.existsSync(artifactPath)) {
       return NextResponse.json(
@@ -26,7 +32,7 @@ export async function GET(
     return new NextResponse(file, {
       headers: {
         "Content-Type": "application/octet-stream",
-        "Content-Disposition": `attachment; filename="artifact-${id}"`,
+        "Content-Disposition": `attachment; filename="${path.basename(artifactPath)}"`,
       },
     });
   } catch (error) {

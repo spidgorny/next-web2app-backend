@@ -7,6 +7,7 @@ import type { Project } from "@/app/project";
 import { RenderTable } from "@/app/render-table";
 import stripAnsi from "strip-ansi";
 import Link from "next/link";
+import { Spinner } from "@nextui-org/react";
 
 export interface JobWithLogs extends Job<Project> {
   logs: {
@@ -18,24 +19,28 @@ export interface JobWithLogs extends Job<Project> {
 export default function Project(props: {
   params: Promise<{ id: string; jobId: string }>;
 }) {
+  const [isDownloading, setIsDownloading] = useState(false);
   const params = use(props.params);
   const { item } = useSwrApi<JobWithLogs>(
     `/api/project/${params.id}/queue/job/`,
     params.jobId,
   );
+
   let { data: job, logs } = item.data ?? { data: null };
+  if (!job) {
+    return <Spinner />;
+  }
+
   let logsTable = (logs?.logs?.map((x) => ({
     logLine: stripAnsi(x),
   })) ?? []) as { logLine: string }[];
-
-  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
     try {
       setIsDownloading(true);
 
       const response = await fetch(
-        `/api/project/${params.id}/job/${params.jobId}/download`,
+        `/api/project/${params.id}/queue/job/${params.jobId}/download`,
       );
 
       if (!response.ok) {
