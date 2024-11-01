@@ -12,7 +12,8 @@ import { promisify } from "node:util";
 
 const mvAsync = promisify(mv);
 
-const flutterProjectRoot = "/home/slawa/dev/flutter_site_container";
+const flutterProjectRoot = process.env.MOBILE_APP_FOLDER as string;
+invariant(flutterProjectRoot);
 
 (async () => {
   void queue.process(1, async (job: Job<Project>) => {
@@ -66,6 +67,7 @@ async function storeBuildResult(job: Job<Project>) {
   );
   const destination = `/tmp/web2app/project-${job.data.id}/job-${job.id}/app-release.aab`;
   fs.mkdirSync(path.dirname(destination), { recursive: true });
-  mvAsync(androidFile, destination, { mkdirp: true });
+  // @ts-ignore
+  await mvAsync(androidFile, destination, { mkdirp: true });
   Logger.info("moved", androidFile, "to", destination);
 }

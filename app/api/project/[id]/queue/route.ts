@@ -4,10 +4,10 @@ import invariant from "tiny-invariant";
 import { queue } from "@/lib/queue";
 import { Project } from "@/app/project";
 import { Job } from "bull";
-import { sort } from "radash";
+import {alphabetical, sort} from "radash";
 
 export async function GET() {
-  let jobs = await queue.getJobs(["completed", "active", "failed"]);
+  let jobs = await queue.getJobs(["waiting", "completed", "active", "failed"]);
   jobs = await Promise.all(
     jobs.map(async (job) => {
       return {
@@ -16,7 +16,7 @@ export async function GET() {
       };
     }),
   );
-  jobs = sort(jobs, (a: Job<Project>) => Number(a.id)).reverse();
+  jobs = alphabetical(jobs, (a: Job<Project>) => String(a.id)).reverse();
   return NextResponse.json({
     data: jobs,
   });

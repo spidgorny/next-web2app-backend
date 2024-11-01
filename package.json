@@ -8,17 +8,18 @@
     "dev:turbo": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "run:processors": "concurrently --timings --restart-tries=999999 \"tsx test/test-do-work.ts\" \"tsx test/test-do-work.ts\""
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.8",
     "axios": "^1.7.7",
-    "bee-queue": "^1.7.1",
     "bull": "^4.16.3",
     "bunyan": "^1.8.15",
     "bunyan-console-stream": "^0.1.0",
     "bunyan-debug-stream": "^3.1.0",
     "bunyan-format": "^0.2.1",
+    "concurrently": "^9.0.1",
     "execa": "^9.4.1",
     "framer-motion": "^11.11.9",
     "humanize": "^0.0.9",
@@ -57,6 +58,7 @@
     "postcss": "^8",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.14",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

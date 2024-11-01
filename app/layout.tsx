@@ -35,8 +35,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen p-0 m-0 dark`}
       >
         <Providers>
-          <section className="flex flex-row gap-3 mx-auto p-0 min-h-screen">
-            <aside className="w-1/6 ms-48 p-6">
+          <section className="flex flex-col-reverse lg:flex-row gap-3 mx-auto p-0 min-h-screen">
+            <aside className="lg:w-1/6 lg:ms-48 p-6">
               <h5 className="text-xl mt-3 mb-5">Menu</h5>
               <ul className="flex flex-col my-5 divide-y-1 divide-gray-800 border-0 [&>*]:py-3">
                 <li>
@@ -57,7 +57,7 @@ export default function RootLayout({
               </ul>
             </aside>
             <div
-              className="w-5/6 flex flex-col min-h-screen"
+              className="w-full lg:w-5/6 flex flex-col min-h-screen"
               style={{ background: "#1E1E20" }}
             >
               <header className="border-b border-black p-5 pe-48">
@@ -65,7 +65,7 @@ export default function RootLayout({
                   <Link href="/">Web2App</Link>
                 </h1>
               </header>
-              <main className="flex-grow p-5 pe-48">{children}</main>
+              <main className="flex-grow p-5 lg:pe-48">{children}</main>
             </div>
           </section>
         </Providers>
