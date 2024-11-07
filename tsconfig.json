@@ -26,6 +26,7 @@
         "./*"
       ]
     },
+    "noImplicitAny": false,
     "target": "ES2017"
   },
   "include": [

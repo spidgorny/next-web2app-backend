@@ -1,5 +1,5 @@
-"use client";;
-import { use } from "react";
+"use client";
+import { PropsWithChildren, use } from "react";
 
 import { useSwrApi } from "@/app/use-swr-api";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import { useAsyncWorking } from "spidgorny-react-helpers/use-async-working";
 import axios from "axios";
 
 import type { Project } from "@/app/project";
+import Image from "next/image";
 
 export default function Project(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
@@ -30,25 +31,45 @@ export default function Project(props: { params: Promise<{ id: string }> }) {
         </div>
       </div>
       <pre className="my-3">data: {JSON.stringify(item.data, null, 2)}</pre>
-      <div className="flex justify-end my-3">
-        {item.data && <BuildButton project={item.data} />}
+      <div className="flex justify-end my-3 gap-3">
+        {item.data && (
+          <>
+            <BuildButton project={item.data} target="apk">
+              <Image src="/img/apk.png" width={32} height={32} alt="apk" />{" "}
+              Build APK
+            </BuildButton>
+            <BuildButton project={item.data} target="aab">
+              <Image src="/img/aab.png" width={32} height={32} alt="aab" />{" "}
+              Build AAB
+            </BuildButton>
+            <BuildButton project={item.data} target="ipa">
+              <Image src="/img/ipa.png" width={32} height={32} alt="ipa" />{" "}
+              Build IPA
+            </BuildButton>
+          </>
+        )}
       </div>
       {item.data && <ShowProjectJobs project={item.data} />}
     </div>
   );
 }
 
-export function BuildButton(props: { project: Project }) {
+export function BuildButton(
+  props: PropsWithChildren<{ project: Project; target: string }>,
+) {
   const list = useJobList(props.project.id);
 
   const { isWorking, error, run } = useAsyncWorking(async () => {
-    await axios.post(`/api/project/${props.project.id}/queue`, props.project);
+    await axios.post(`/api/project/${props.project.id}/queue`, {
+      ...props.project,
+      target: props.target,
+    });
     await list.mutate();
   });
   return (
     <div>
       <Button onClick={run} isLoading={isWorking}>
-        Build Now
+        {props.children}
       </Button>
       <ErrorAlert error={error} />
     </div>

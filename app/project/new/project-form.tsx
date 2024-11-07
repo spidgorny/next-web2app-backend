@@ -5,7 +5,7 @@ import {
   createProject,
   updateProject,
 } from "@/app/project/new/project-actions";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Link } from "@nextui-org/react";
 import { Project } from "@/app/project";
 
 export function ProjectForm(props: { initialData?: Project }) {
@@ -13,9 +13,11 @@ export function ProjectForm(props: { initialData?: Project }) {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let formData = Object.fromEntries(new FormData(e.target).entries()) as {
+    let formData = Object.fromEntries(
+      new FormData(e.target as HTMLFormElement).entries(),
+    ) as {
       name: string;
-    };
+    } as Project;
     console.log(formData);
     if (props.initialData?.id) {
       await updateProject(props.initialData.id, formData);
@@ -30,17 +32,22 @@ export function ProjectForm(props: { initialData?: Project }) {
     <form onSubmit={onSubmit}>
       <div className="mb-3">
         <label>
-          Name
+          Name (should start with 'com.androidfromfrankfurt.'):
           <Input
             name="name"
             required
             defaultValue={props.initialData?.name ?? ""}
+            pattern="com\.androidfromfrankfurt\..*"
           />
         </label>
       </div>
       <div className="mb-3">
         <label>
-          Website URL:
+          Website URL: (
+          <Link href={props.initialData?.url} target="_blank">
+            Open
+          </Link>
+          )
           <Input
             name="url"
             required
