@@ -4,15 +4,13 @@ import { PropsWithChildren, use } from "react";
 import { useSwrApi } from "@/app/use-swr-api";
 import Link from "next/link";
 import { Button, Card, CardBody } from "@nextui-org/react";
-import {
-  ShowProjectJobs,
-  useJobList,
-} from "@/app/project/[id]/show-project-jobs";
+import { ShowProjectJobs } from "@/app/project/[id]/show-project-jobs";
 import { useAsyncWorking } from "spidgorny-react-helpers/use-async-working";
 import axios from "axios";
 
 import type { Project } from "@/app/project";
 import Image from "next/image";
+import { useJobList } from "@/app/project/[id]/project-job";
 
 export default function Project(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);

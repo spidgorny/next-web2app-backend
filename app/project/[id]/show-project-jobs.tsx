@@ -1,31 +1,15 @@
-import { useSwrApi } from "@/app/use-swr-api";
-import urlcat from "urlcat";
-import { id } from "postcss-selector-parser";
 import { RenderTable } from "@/app/render-table";
 import Link from "next/link";
 import { Project } from "@/app/project";
 import { Spinner } from "@nextui-org/react";
 import humanizeDuration from "humanize-duration";
-import { Job } from "bull";
 import humanize from "humanize";
-
-export function useJobList(project: string) {
-  const { list } = useSwrApi(
-    urlcat(`/api/project/${id}/queue`, { project }),
-    undefined,
-    {
-      refreshInterval: 3000,
-    },
-  );
-  return list;
-}
-
-type ProjectJob = Job<Project> & { status: "active" | "completed" | "failed" };
+import { ProjectJob, useJobList } from "@/app/project/[id]/project-job";
 
 export function ShowProjectJobs(props: { project: Project }) {
   const list = useJobList(props.project.id);
   return (
-    <RenderTable
+    <RenderTable<ProjectJob>
       columns={[
         {
           key: "id",
@@ -61,7 +45,7 @@ export function ShowProjectJobs(props: { project: Project }) {
           label: "Dur",
           render: (row: ProjectJob) => {
             return humanizeDuration(
-              (row?.finishedOn ?? 0) - (row?.processedOn ?? 0),
+              (row?.finishedOn ?? Date.now()) - (row?.processedOn ?? 0),
             );
           },
         },

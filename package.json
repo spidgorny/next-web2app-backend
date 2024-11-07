@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "run:processors": "concurrently --timings --restart-tries=999999 \"tsx test/test-do-work.ts\" \"tsx test/test-do-work.ts\""
+    "tsx:run-queue": "tsx --watch --env-file .env lib/run-queue.ts",
+    "run:processors": "concurrently --timings --restart-tries=999999 \"tsx lib/run-queue.ts\""
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.8",
