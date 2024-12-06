@@ -13,7 +13,7 @@ ARG NODE_VERSION=23.1.0
 FROM node:${NODE_VERSION} AS base
 ADD nscacert.pem /usr/local/share/ca-certificates/cacert.crt
 RUN chmod 644 /usr/local/share/ca-certificates/cacert.crt
-RUN apk --no-cache add --no-check-certificate ca-certificates && update-ca-certificates
+#RUN apk --no-cache add --no-check-certificate ca-certificates
 RUN update-ca-certificates
 RUN npm config set strict-ssl false
 # Set working directory for all build stages.
