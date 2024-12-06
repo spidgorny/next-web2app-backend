@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=slawa
-ExecStart=/usr/bin/npx tsx lib/run-queue.ts
+ExecStart=/usr/local/bin/npx tsx --env-file .env lib/run-queue.ts
 WorkingDirectory=/home/slawa/dev/next-web2app-backend
 Restart=on-failure
 
