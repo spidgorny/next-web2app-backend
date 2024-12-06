@@ -5,4 +5,5 @@ export type Project = {
   title: string;
   color?: string;
   status: string;
+  target: string;
 };

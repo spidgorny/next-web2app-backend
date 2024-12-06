@@ -9,7 +9,11 @@ import path from "node:path";
 import invariant from "tiny-invariant";
 import mv from "mv";
 import { promisify } from "node:util";
-import { getTargetArtifactPath } from "./getTargetArtifactPath";
+import {
+  getSourceArtifactPath,
+  getTargetArtifactPath,
+} from "./getTargetArtifactPath";
+import * as os from "node:os";
 
 const mvAsync = promisify(mv);
 
@@ -21,7 +25,13 @@ invariant(flutterProjectRoot);
     try {
       Logger.info(`Processing job ${job.id}`);
 
-      const steps = [generateConfigYamlFile, runBuild, storeBuildResult];
+      const steps = [
+        generateConfigYamlFile,
+        changeAppPackageName,
+        renameProject,
+        runBuild,
+        storeBuildResult,
+      ];
 
       for await (let step of steps) {
         Logger.info(step.name);
@@ -49,8 +59,45 @@ async function generateConfigYamlFile(job: Job<Project>) {
   );
 }
 
+async function changeAppPackageName(job: Job<Project>) {
+  const appId = job.data.name;
+  await spawnAndLog(job, `dart run change_app_package_name:main ${appId}`);
+}
+
+async function renameProject(job: Job<Project>) {
+  const appName = job.data.title;
+  await spawnAndLog(
+    job,
+    `cmd /c C:\\Users\\depidsvy\\AppData\\Local\\Pub\\Cache\\bin\\rename.bat setAppName --value "${appName}" --targets ios,android,macos,windows,linux`,
+  );
+}
+
 async function runBuild(job: Job<Project>) {
-  const cmd = "script -c 'flutter build appbundle'";
+  const targetMap = {
+    apk: "apk",
+    aab: "bundle",
+    ipa: "ipa",
+  };
+  const buildTarget = targetMap[job.data.target];
+  await spawnAndLog(job, `flutter build ${buildTarget}`);
+}
+
+async function storeBuildResult(job: Job<Project>) {
+  const androidFile = getSourceArtifactPath(job);
+  const destination = getTargetArtifactPath(job);
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  // @ts-ignore
+  await mvAsync(androidFile, destination, { mkdirp: true });
+  Logger.info("moved", androidFile, "to", destination);
+}
+
+async function spawnAndLog(job: Job<Project>, cmd: string) {
+  if (os.platform() === "linux") {
+    cmd = `script -c '${cmd}'`;
+  }
+  // if (os.platform() === "win32") {
+  //   cmd = `cmd /c '${cmd}'`;
+  // }
   Logger.info(flutterProjectRoot, cmd);
   for await (const line of spawn(cmd, {
     cwd: flutterProjectRoot,
@@ -59,16 +106,4 @@ async function runBuild(job: Job<Project>) {
     Logger.info(line);
     await job.log(line);
   }
-}
-
-async function storeBuildResult(job: Job<Project>) {
-  const androidFile = path.join(
-    flutterProjectRoot,
-    "build/app/outputs/bundle/release/app-release.aab",
-  );
-  const destination = getTargetArtifactPath(job);
-  fs.mkdirSync(path.dirname(destination), { recursive: true });
-  // @ts-ignore
-  await mvAsync(androidFile, destination, { mkdirp: true });
-  Logger.info("moved", androidFile, "to", destination);
 }
