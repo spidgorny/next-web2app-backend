@@ -19,23 +19,23 @@ services:
       - /tmp:/tmp
       - /home/slawa/dev/flutter_site_container:/home/slawa/dev/flutter_site_container
 
-  builder:
-    restart: always
-    build:
-        context: .
-        dockerfile: Dockerfile.builder
-    depends_on:
-      - redis
-    env_file:
-      - .env
-    environment:
-        NODE_ENV: production
-        REDIS: redis://host.docker.internal:6380
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - /tmp:/tmp
-      - /home/slawa/dev/flutter_site_container:/home/slawa/dev/flutter_site_container
+#  builder:
+#    restart: always
+#    build:
+#        context: .
+#        dockerfile: Dockerfile.builder
+#    depends_on:
+#      - redis
+#    env_file:
+#      - .env
+#    environment:
+#        NODE_ENV: production
+#        REDIS: redis://host.docker.internal:6380
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+#    volumes:
+#      - /tmp:/tmp
+#      - /home/slawa/dev/flutter_site_container:/home/slawa/dev/flutter_site_container
 
   redis:
     image: redis

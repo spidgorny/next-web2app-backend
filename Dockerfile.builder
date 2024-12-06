@@ -17,12 +17,22 @@ RUN chmod 644 /usr/local/share/ca-certificates/cacert.crt
 RUN update-ca-certificates
 RUN npm config set strict-ssl false
 # Set working directory for all build stages.
-WORKDIR /usr/src/app
+WORKDIR /root
 
+RUN apt-get update -y && apt-get upgrade -y;
+RUN apt-get install -y curl git unzip xz-utils zip libglu1-mesa
+#RUN apt-get install libc6:amd64 libstdc++6:amd64 lib32z1 libbz2-1.0:amd64
+RUN curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.5-stable.tar.xz
+RUN ls -la ~
+RUN tar -xf ~/flutter_linux_3.24.5-stable.tar.xz -C ~/
+RUN echo 'export PATH="~/flutter/bin:$PATH"' >> ~/.bash_profile
+RUN ls -la ~/flutter
+RUN ~/flutter/bin/flutter doctor --android-licenses
 
 ################################################################################
 # Create a stage for installing production dependecies.
 FROM base AS builder
+WORKDIR /usr/src/app
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -39,7 +49,7 @@ COPY .env .
 # Run the build script.
 
 # Run the application as a non-root user.
-USER node
+#USER node
 
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
