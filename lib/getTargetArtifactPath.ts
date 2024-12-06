@@ -1,14 +1,7 @@
 import { Project } from "@/app/project";
 import { Job } from "bull";
-
-export function getTargetArtifactPathServer(job: Job<Project>) {
-  return `/tmp/web2app/project-${job.data.id}/job-${job.id}/app-release.aab`;
-}
-
 import path from "node:path";
-import { Project } from "@/app/project";
-import { Job } from "bull";
-import invariant from "tiny-invariant";
+import { invariant } from "@/lib/invariant";
 
 const flutterProjectRoot = process.env.MOBILE_APP_FOLDER as string;
 invariant(flutterProjectRoot);
@@ -21,6 +14,10 @@ export function getSourceArtifactPath(job: Job<Project>) {
   };
   const file = fileMap[job.data.target];
   return path.join(flutterProjectRoot, file);
+}
+
+export function getTargetArtifactPathServer(job: Job<Project>) {
+  return `/tmp/web2app/project-${job.data.id}/job-${job.id}/app-release.aab`;
 }
 
 export function getTargetArtifactPath(job: Job<Project>) {

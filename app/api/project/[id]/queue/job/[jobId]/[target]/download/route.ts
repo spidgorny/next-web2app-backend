@@ -3,12 +3,22 @@ import fs from "fs";
 import path from "path";
 import { queue } from "@/lib/queue";
 import { getTargetArtifactPath } from "@/lib/getTargetArtifactPath";
-import invariant from "tiny-invariant";
+import { invariant } from "@/lib/invariant";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; jobId: string }> },
 ) {
+  console.log("==========", process.env.NODE_ENV, process.env.NEXT_RUNTIME);
+  if (process.env.NODE_ENV === "production" && !process.env.NEXT_RUNTIME) {
+    return NextResponse.json(
+      { message: "This API route is not available during build" },
+      { status: 403 },
+    );
+  }
+
   try {
     const { jobId } = await params;
     console.log("download", { jobId });

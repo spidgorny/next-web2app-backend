@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useStateObj } from "spidgorny-react-helpers/use-state-obj";
 import useSWR from "swr";
 import { Job } from "bull";
-import { ErrorAlert } from "@/app/project/[id]/page";
+
+import {ErrorAlert} from "@/app/project/[id]/error-alert";
 
 export function DownloadArtifacts(props: { job: ProjectJob }) {
   const [isDownloading, setIsDownloading] = useState(false);

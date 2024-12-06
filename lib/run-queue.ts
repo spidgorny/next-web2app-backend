@@ -6,7 +6,7 @@ import { Project } from "@/app/project";
 import yaml from "yaml";
 import * as fs from "node:fs";
 import path from "node:path";
-import invariant from "tiny-invariant";
+import { invariant } from "@/lib/invariant";
 import mv from "mv";
 import { promisify } from "node:util";
 import {
@@ -33,7 +33,7 @@ invariant(flutterProjectRoot);
         storeBuildResult,
       ];
 
-      for await (let step of steps) {
+      for await (const step of steps) {
         Logger.info(step.name);
         await step(job);
         await job.progress(1);

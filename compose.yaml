@@ -1,0 +1,29 @@
+services:
+  backend:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      REDIS: redis://host.docker.internal:6380
+    ports:
+      - "3000:3000"
+
+  redis:
+    image: redis
+    ports:
+      - "6380:6379"
+
+#  splunk:
+#    image: splunk/splunk
+#    ports:
+#      - "8001:8000"
+#      - "8088:8088"
+#    environment:
+#      - "SPLUNK_START_ARGS=--accept-license"
+#      - "SPLUNK_PASSWORD=adminadmin"

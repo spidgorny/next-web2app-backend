@@ -21,7 +21,7 @@ const columns = [
 ] as TableColumnDef<Record<string, any>>[];
 
 export function ListProjects() {
-  const { list } = useSwrApi("/api/project");
+  const { list } = useSwrApi<Project>("/api/project");
   return (
     <div>
       <div className="flex justify-between">

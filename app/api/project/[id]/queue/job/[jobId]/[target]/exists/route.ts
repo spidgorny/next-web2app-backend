@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import { queue } from "@/lib/queue";
 import { getTargetArtifactPath } from "@/lib/getTargetArtifactPath";
-import invariant from "tiny-invariant";
+import { invariant } from "@/lib/invariant";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
   request: NextRequest,

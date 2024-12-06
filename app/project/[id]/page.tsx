@@ -1,18 +1,16 @@
 "use client";
-import { PropsWithChildren, use } from "react";
+import {use} from "react";
 
-import { useSwrApi } from "@/app/use-swr-api";
+import {useSwrApi} from "@/app/use-swr-api";
 import Link from "next/link";
-import { Button, Card, CardBody } from "@nextui-org/react";
-import { ShowProjectJobs } from "@/app/project/[id]/show-project-jobs";
-import { useAsyncWorking } from "spidgorny-react-helpers/use-async-working";
-import axios from "axios";
+import {Button} from "@nextui-org/react";
+import {ShowProjectJobs} from "@/app/project/[id]/show-project-jobs";
 
-import type { Project } from "@/app/project";
+import type {Project} from "@/app/project";
 import Image from "next/image";
-import { useJobList } from "@/app/project/[id]/project-job";
+import {BuildButton} from "@/app/project/[id]/build-button";
 
-export default function Project(props: { params: Promise<{ id: string }> }) {
+export default function ProjectPage(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
   const { item } = useSwrApi<Project>(`/api/project`, params.id);
   return (
@@ -49,42 +47,5 @@ export default function Project(props: { params: Promise<{ id: string }> }) {
       </div>
       {item.data && <ShowProjectJobs project={item.data} />}
     </div>
-  );
-}
-
-export function BuildButton(
-  props: PropsWithChildren<{ project: Project; target: string }>,
-) {
-  const list = useJobList(props.project.id);
-
-  const { isWorking, error, run } = useAsyncWorking(async () => {
-    await axios.post(`/api/project/${props.project.id}/queue`, {
-      ...props.project,
-      target: props.target,
-    });
-    await list.mutate();
-  });
-  return (
-    <div>
-      <Button onClick={run} isLoading={isWorking}>
-        {props.children}
-      </Button>
-      <ErrorAlert error={error} />
-    </div>
-  );
-}
-
-export function ErrorAlert(props: { error?: Error }) {
-  if (!props.error) {
-    return;
-  }
-  return (
-    <Card>
-      <CardBody className="text-red-500">
-        <p>
-          {props.error.message} [{props.error.name}]
-        </p>
-      </CardBody>
-    </Card>
   );
 }

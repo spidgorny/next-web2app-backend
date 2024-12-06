@@ -1,8 +1,8 @@
-import Redis from "ioredis";
-import JSONStore from "redis-json";
 import { NextRequest, NextResponse } from "next/server";
-import invariant from "tiny-invariant";
+import { invariant } from "@/lib/invariant";
 import { redis, store } from "@/lib/json-store";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   // const data = await redis.keys("*");

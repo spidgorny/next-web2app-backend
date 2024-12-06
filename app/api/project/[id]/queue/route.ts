@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Logger } from "@/lib/splunk";
-import invariant from "tiny-invariant";
+import { invariant } from "@/lib/invariant";
 import { queue } from "@/lib/queue";
 import { Project } from "@/app/project";
 import { Job } from "bull";
-import { alphabetical, sort } from "radash";
+import { alphabetical } from "radash";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   let jobs = await queue.getJobs(["waiting", "completed", "active", "failed"]);

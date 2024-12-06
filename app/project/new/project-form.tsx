@@ -32,7 +32,7 @@ export function ProjectForm(props: { initialData?: Project }) {
     <form onSubmit={onSubmit}>
       <div className="mb-3">
         <label>
-          Name (should start with 'com.androidfromfrankfurt.'):
+          Name (should start with &apos;com.androidfromfrankfurt.&apos;):
           <Input
             name="name"
             required
